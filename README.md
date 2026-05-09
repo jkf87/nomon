@@ -1,42 +1,42 @@
-# openclaw-gnomon
+# nomon
 
-![Gnomon Banner](./docs/gnomon-banner.jpg)
+![Nomon Banner](./docs/gnomon-banner.jpg)
 
-**Gnomon** — 노몬. 해시계 바늘처럼, 무엇을 측정할지 먼저 세운다.
+**노몬** — 해시계 바늘처럼, 무엇을 측정할지 먼저 세운다.
 
 Rubric-first evaluation harness for OpenClaw. Define what "good" looks like before writing a single line.
 
 ---
 
-## Why Gnomon?
+## 노몬이 뭔가요?
 
-A **gnomon** is the blade of a sundial — it casts a shadow that tells you where you are. In the same way, a `rubric.yaml` casts the shape of success before any work begins.
+**노몬(gnomon)**은 해시계의 바늘이다. 태양을 기준으로 그림자를 드리워 시간을 측정하는 도구 — 인류 최초의 정량 verifier. LLM에게 묻지 않고 ground truth에 직접 대조한다.
 
-Gnomon enforces verifier-first discipline at the harness level — TDD applied to AI workflows.
+노몬은 그 원리를 AI 하네스에 적용한다. `rubric.yaml`이 먼저, workflow가 나중이다.
 
-| | Gnomon |
+| | 노몬 |
 |---|---|
-| Philosophy | rubric-first |
-| Entry point | rubric.yaml |
-| Loop driver | verifier → writer (repeat until PASS) |
-| Measurement | explicit: 정량 / 페르소나-LLM / 사람 |
-| Gate | LLM-only >70% blocks entry |
+| 철학 | rubric-first (평가 먼저, 작성 나중) |
+| 진입점 | rubric.yaml |
+| 루프 | verifier → writer (PASS할 때까지) |
+| 측정 방식 | 정량 / 페르소나-LLM / 사람 |
+| 차단 조건 | LLM 비율 70% 초과 시 진입 불가 |
 
 ---
 
 ## Quick Start
 
 ```bash
-uvx --from git+https://github.com/jkf87/openclaw-gnomon openclaw-gnomon install
+uvx --from git+https://github.com/jkf87/nomon openclaw-gnomon install
 ```
 
 Then in OpenClaw: `/gnomon:setup`
 
 Done. You now have `/gnomon:rubric`, `/gnomon:verify-check`, `/gnomon:run`, `/gnomon:calibrate`.
 
-Verify: `uvx --from git+https://github.com/jkf87/openclaw-gnomon openclaw-gnomon doctor`
+Verify: `uvx --from git+https://github.com/jkf87/nomon openclaw-gnomon doctor`
 
-Uninstall: `uvx --from git+https://github.com/jkf87/openclaw-gnomon openclaw-gnomon uninstall`
+Uninstall: `uvx --from git+https://github.com/jkf87/nomon openclaw-gnomon uninstall`
 
 ---
 
@@ -62,24 +62,30 @@ writer → verifier 루프 (통과할 때까지)
 
 ```yaml
 task: "카드뉴스 10장 생성"
-persona: "25-35세 직장인"
-criteria:
-  - name: "폰트 크기"
-    measurement: "정량"
-    spec: "모든 텍스트 >= 24pt"
-  - name: "이해도"
-    measurement: "페르소나-LLM"
-    spec: "페르소나가 5초 안에 핵심 요약 가능"
-  - name: "이미지 연관성"
-    measurement: "사람"
-    spec: "내용 톤과 이미지 톤 일치"
-taste_residue_gate: 0.7  # 상관계수 임계값
+goal_persona:
+  role: "25~35세 직장인"
+  success_signal: "5초 안에 핵심 1줄 요약 가능"
+items:
+  - id: r1
+    label: quantitative
+    description: "폰트 크기 >= 24pt"
+    pass_condition: "모든 텍스트 >= 24pt"
+  - id: r2
+    label: persona-llm
+    description: "페르소나가 5초 안에 핵심 요약 가능"
+    pass_condition: "PASS"
+  - id: r3
+    label: human
+    description: "이미지-내용 톤 일치"
+    pass_condition: "검토자 승인"
+taste_gate:
+  spearman_threshold: 0.7
 ```
 
-Rules enforced by the harness:
-- Every criterion must have a `measurement` label: `정량` / `페르소나-LLM` / `사람`
-- If `페르소나-LLM` items exceed 70% of total criteria, entry is blocked
-- `/gnomon:calibrate` checks human vs LLM scoring correlation; below 0.7 triggers rubric revision
+Rules enforced:
+- `quantitative` 항목 최소 30% 필수 (미달 시 진입 차단)
+- `persona-llm` 70% 초과 시 차단
+- `taste_gate`: 사람 채점 vs LLM 채점 상관계수 0.7 미만이면 rubric 리파인 강제
 
 ---
 
