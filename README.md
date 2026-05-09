@@ -1,6 +1,6 @@
 # nomon
 
-![Gnomon — Sundial Pillar Casting a Measured Shadow](./docs/gnomon-hero.svg)
+<p align="center"><img src="./assets/gnomon-logo.jpg" width="200" alt="노몬 로고 — 해시계 바늘"/></p>
 
 **노몬(gnomon)** — 해시계 바늘. 태양 빛이 닿는 순간 그림자가 정답이 된다.
 
