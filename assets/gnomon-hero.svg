@@ -1,0 +1,42 @@
+<svg viewBox="0 0 1536 864" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="gnomon — sundial pillar casting a measured shadow">
+  <rect width="1536" height="864" fill="#1a2332"/>
+  <g stroke="#2a3548" stroke-width="0.5" opacity="0.4">
+    <line x1="0" y1="216" x2="1536" y2="216"/>
+    <line x1="0" y1="432" x2="1536" y2="432"/>
+    <line x1="0" y1="648" x2="1536" y2="648"/>
+    <line x1="384" y1="0" x2="384" y2="864"/>
+    <line x1="768" y1="0" x2="768" y2="864"/>
+    <line x1="1152" y1="0" x2="1152" y2="864"/>
+  </g>
+  <circle cx="240" cy="180" r="28" fill="#e8a857"/>
+  <g stroke="#e8a857" stroke-width="2.5" stroke-linecap="round">
+    <line x1="240" y1="115" x2="240" y2="138"/>
+    <line x1="240" y1="222" x2="240" y2="245"/>
+    <line x1="175" y1="180" x2="198" y2="180"/>
+    <line x1="282" y1="180" x2="305" y2="180"/>
+    <line x1="194" y1="134" x2="210" y2="150"/>
+    <line x1="270" y1="210" x2="286" y2="226"/>
+    <line x1="286" y1="134" x2="270" y2="150"/>
+    <line x1="210" y1="210" x2="194" y2="226"/>
+  </g>
+  <line x1="240" y1="180" x2="1206" y2="640" stroke="#e8a857" stroke-width="1" opacity="0.35" stroke-dasharray="4,4"/>
+  <line x1="120" y1="640" x2="1416" y2="640" stroke="#f0e6d2" stroke-width="2"/>
+  <line x1="450" y1="640" x2="450" y2="280" stroke="#f0e6d2" stroke-width="7" stroke-linecap="square"/>
+  <line x1="430" y1="640" x2="470" y2="640" stroke="#f0e6d2" stroke-width="3"/>
+  <line x1="450" y1="640" x2="1206" y2="640" stroke="#f0e6d2" stroke-width="4" opacity="0.5"/>
+  <g stroke="#f0e6d2" stroke-width="2">
+    <line x1="534" y1="640" x2="534" y2="668"/>
+    <line x1="618" y1="640" x2="618" y2="668"/>
+    <line x1="702" y1="640" x2="702" y2="668"/>
+    <line x1="786" y1="640" x2="786" y2="668"/>
+    <line x1="870" y1="640" x2="870" y2="668"/>
+    <line x1="954" y1="640" x2="954" y2="668"/>
+    <line x1="1038" y1="640" x2="1038" y2="668"/>
+    <line x1="1122" y1="640" x2="1122" y2="668"/>
+    <line x1="1206" y1="640" x2="1206" y2="676"/>
+  </g>
+  <text x="534" y="700" font-family="Georgia, serif" font-size="18" fill="#f0e6d2" text-anchor="middle">PASS</text>
+  <text x="1206" y="708" font-family="Georgia, serif" font-size="18" fill="#f0e6d2" text-anchor="middle">FAIL</text>
+  <polygon points="1206,635 1218,640 1206,645" fill="#f0e6d2" opacity="0.5"/>
+  <text x="1416" y="800" font-family="Georgia, serif" font-size="22" font-style="italic" fill="#f0e6d2" text-anchor="end" opacity="0.7">gnomon</text>
+</svg>
