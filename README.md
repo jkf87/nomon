@@ -1,8 +1,8 @@
 # nomon
 
-![Nomon Banner](./docs/gnomon-banner.jpg)
+![Gnomon — Sundial Pillar Casting a Measured Shadow](./docs/gnomon-hero.svg)
 
-**노몬** — 해시계 바늘처럼, 무엇을 측정할지 먼저 세운다.
+**노몬(gnomon)** — 해시계 바늘. 태양 빛이 닿는 순간 그림자가 정답이 된다.
 
 Rubric-first evaluation harness for OpenClaw. Define what "good" looks like before writing a single line.
 
