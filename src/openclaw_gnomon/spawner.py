@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from openclaw_nomon.task_schema import NomonTask
+from openclaw_gnomon.task_schema import GnomonTask
 
 
 @dataclass
@@ -27,7 +27,7 @@ class SpawnResult:
     note: str = ""
 
 
-def _build_prompt(task: NomonTask) -> str:
+def _build_prompt(task: GnomonTask) -> str:
     """Render a unified prompt the agent receives, regardless of task_type."""
     spec = task.parsed_spec()
     base = getattr(spec, "prompt", None) or f"Complete the {task.task_type} task '{task.name}'."
@@ -47,7 +47,7 @@ def _build_prompt(task: NomonTask) -> str:
     return base
 
 
-def _resolve_working_dir(task: NomonTask, base_dir: Path) -> Path:
+def _resolve_working_dir(task: GnomonTask, base_dir: Path) -> Path:
     spec = task.parsed_spec()
     candidate = getattr(spec, "working_dir", None)
     if not candidate:
@@ -115,11 +115,11 @@ class AgentSpawner:
     # Public API
     # ------------------------------------------------------------------
 
-    def spawn_all(self, task: NomonTask, base_dir: Path) -> Dict[str, SpawnResult]:
+    def spawn_all(self, task: GnomonTask, base_dir: Path) -> Dict[str, SpawnResult]:
         return asyncio.run(self.async_spawn_all(task, base_dir))
 
     async def async_spawn_all(
-        self, task: NomonTask, base_dir: Path
+        self, task: GnomonTask, base_dir: Path
     ) -> Dict[str, SpawnResult]:
         base_dir = Path(base_dir)
         base_dir.mkdir(parents=True, exist_ok=True)
@@ -142,7 +142,7 @@ class AgentSpawner:
     # Implementations
     # ------------------------------------------------------------------
 
-    def _prepare_dir(self, agent_dir: Path, task: NomonTask, base_dir: Path) -> None:
+    def _prepare_dir(self, agent_dir: Path, task: GnomonTask, base_dir: Path) -> None:
         """Create per-agent output dir and seed it with the working directory if any."""
         agent_dir.mkdir(parents=True, exist_ok=True)
         seed = _resolve_working_dir(task, base_dir.parent if base_dir.parent.exists() else base_dir)
@@ -163,7 +163,7 @@ class AgentSpawner:
                 pass
 
     async def _spawn_claude_code(
-        self, task: NomonTask, output_dir: Path
+        self, task: GnomonTask, output_dir: Path
     ) -> SpawnResult:
         prompt = _build_prompt(task)
         if self.dry_run:
@@ -205,7 +205,7 @@ class AgentSpawner:
             stderr=result["stderr"],
         )
 
-    async def _spawn_codex(self, task: NomonTask, output_dir: Path) -> SpawnResult:
+    async def _spawn_codex(self, task: GnomonTask, output_dir: Path) -> SpawnResult:
         prompt = _build_prompt(task)
         if self.dry_run:
             (output_dir / "DRY_RUN.txt").write_text(

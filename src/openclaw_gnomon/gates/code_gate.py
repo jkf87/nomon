@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Optional, Tuple
 
-from openclaw_nomon.gates.base import GateResult
+from openclaw_gnomon.gates.base import GateResult
 
 
 @dataclass

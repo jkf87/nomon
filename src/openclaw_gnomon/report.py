@@ -1,5 +1,5 @@
 """
-Nomon evaluation report — per-agent scores, ranking, markdown/JSON export.
+Gnomon evaluation report — per-agent scores, ranking, markdown/JSON export.
 """
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
-from openclaw_nomon.gates.base import GateResult
+from openclaw_gnomon.gates.base import GateResult
 
 
 @dataclass
@@ -57,7 +57,7 @@ class EvaluationReport:
 
     def to_markdown(self) -> str:
         lines: List[str] = []
-        lines.append(f"# Nomon Evaluation Report — {self.task_name}")
+        lines.append(f"# Gnomon Evaluation Report — {self.task_name}")
         lines.append("")
         lines.append(f"- **Task type:** `{self.task_type}`")
         lines.append(f"- **Timestamp:** {self.timestamp}")

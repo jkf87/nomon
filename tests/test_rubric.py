@@ -2,7 +2,7 @@
 import pytest
 from pathlib import Path
 
-from openclaw_nomon.rubric import (
+from openclaw_gnomon.rubric import (
     QUANTITATIVE_MIN_RATIO,
     DryRunConfig,
     GoalPersona,

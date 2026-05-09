@@ -1,0 +1,10 @@
+name: "Landing Page Accessibility"
+task_type: ui
+spec:
+  prompt: "Build an accessible landing page hero section in HTML/CSS."
+  html_path: "index.html"
+  wcag_level: "AA"
+agents:
+  - claude-code
+  - codex
+timeout_seconds: 240

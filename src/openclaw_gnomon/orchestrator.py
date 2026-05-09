@@ -1,5 +1,5 @@
 """
-NomonOrchestrator — main pipeline tying loaders, spawners, gates, and reports.
+GnomonOrchestrator — main pipeline tying loaders, spawners, gates, and reports.
 """
 from __future__ import annotations
 
@@ -7,14 +7,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
-from openclaw_nomon.gates import gate_for
-from openclaw_nomon.gates.base import GateResult
-from openclaw_nomon.report import AgentEvaluation, EvaluationReport, build_report
-from openclaw_nomon.spawner import AgentSpawner, SpawnResult
-from openclaw_nomon.task_schema import NomonTask, load_task
+from openclaw_gnomon.gates import gate_for
+from openclaw_gnomon.gates.base import GateResult
+from openclaw_gnomon.report import AgentEvaluation, EvaluationReport, build_report
+from openclaw_gnomon.spawner import AgentSpawner, SpawnResult
+from openclaw_gnomon.task_schema import GnomonTask, load_task
 
 
-class NomonOrchestrator:
+class GnomonOrchestrator:
     """Run the full evaluation pipeline."""
 
     def __init__(
@@ -33,7 +33,7 @@ class NomonOrchestrator:
         task = load_task(Path(task_path))
         return self.run(task)
 
-    def run(self, task: NomonTask) -> EvaluationReport:
+    def run(self, task: GnomonTask) -> EvaluationReport:
         run_dir = self._make_run_dir(task)
         agents_dir = run_dir / "agents"
         agents_dir.mkdir(parents=True, exist_ok=True)
@@ -98,7 +98,7 @@ class NomonOrchestrator:
             return 0.0
         return sum(g.score for g in gate_results) / len(gate_results)
 
-    def _make_run_dir(self, task: NomonTask) -> Path:
+    def _make_run_dir(self, task: GnomonTask) -> Path:
         ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
         slug = "".join(c if c.isalnum() else "-" for c in task.name).strip("-").lower() or "task"
         run_dir = self.runs_dir / f"{ts}-{slug}"

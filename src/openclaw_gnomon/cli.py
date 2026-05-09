@@ -4,12 +4,12 @@ from pathlib import Path
 import typer
 from rich.console import Console
 
-from openclaw_nomon.paths import (
+from openclaw_gnomon.paths import (
     nomon_config_path,
     openclaw_mcp_config_path,
     openclaw_skills_dir,
 )
-from openclaw_nomon.installer import (
+from openclaw_gnomon.installer import (
     merge_mcp_entry,
     remove_mcp_entry,
     stage_skill_files,
@@ -18,20 +18,20 @@ from openclaw_nomon.installer import (
 
 console = Console()
 err_console = Console(stderr=True)
-app = typer.Typer(help="Nomon — eval-first workflow harness for OpenClaw")
+app = typer.Typer(help="Gnomon — eval-first workflow harness for OpenClaw")
 rubric_app = typer.Typer(help="Rubric management commands")
 app.add_typer(rubric_app, name="rubric")
 
 
 @app.command()
 def install(verbose: bool = typer.Option(False, "--verbose", "-v")):
-    """Install Nomon skill and MCP into OpenClaw. Idempotent."""
+    """Install Gnomon skill and MCP into OpenClaw. Idempotent."""
     try:
         skills_dir = openclaw_skills_dir()
         mcp_config_path = openclaw_mcp_config_path()
         config_path = nomon_config_path()
 
-        console.print("[bold]Installing Nomon for OpenClaw...[/bold]")
+        console.print("[bold]Installing Gnomon for OpenClaw...[/bold]")
 
         if verbose:
             console.print(f"  Staging skill files to {skills_dir}/nomon/")
@@ -61,10 +61,10 @@ def install(verbose: bool = typer.Option(False, "--verbose", "-v")):
 
 @app.command()
 def uninstall(verbose: bool = typer.Option(False, "--verbose", "-v")):
-    """Uninstall Nomon from OpenClaw."""
+    """Uninstall Gnomon from OpenClaw."""
     try:
         mcp_config_path = openclaw_mcp_config_path()
-        console.print("[bold]Uninstalling Nomon from OpenClaw...[/bold]")
+        console.print("[bold]Uninstalling Gnomon from OpenClaw...[/bold]")
 
         if verbose:
             console.print(f"  Removing MCP entry from {mcp_config_path}")
@@ -81,9 +81,9 @@ def uninstall(verbose: bool = typer.Option(False, "--verbose", "-v")):
 
 @app.command()
 def doctor(verbose: bool = typer.Option(False, "--verbose", "-v")):
-    """Diagnose Nomon installation."""
+    """Diagnose Gnomon installation."""
     try:
-        console.print("[bold]Diagnosing Nomon installation...[/bold]")
+        console.print("[bold]Diagnosing Gnomon installation...[/bold]")
 
         skills_dir = openclaw_skills_dir()
         mcp_config_path = openclaw_mcp_config_path()
@@ -107,7 +107,7 @@ def doctor(verbose: bool = typer.Option(False, "--verbose", "-v")):
         checks.append(("MCP entry", mcp_ok, str(mcp_config_path)))
 
         config_ok = config_path.exists()
-        checks.append(("Nomon config", config_ok, str(config_path)))
+        checks.append(("Gnomon config", config_ok, str(config_path)))
 
         import subprocess
         try:
@@ -151,8 +151,8 @@ def run_evaluation(
         err_console.print(f"[red]✗ Task file not found: {task}[/red]")
         sys.exit(1)
 
-    from openclaw_nomon.orchestrator import NomonOrchestrator
-    from openclaw_nomon.task_schema import TaskSchemaError, load_task
+    from openclaw_gnomon.orchestrator import GnomonOrchestrator
+    from openclaw_gnomon.task_schema import TaskSchemaError, load_task
 
     try:
         task_obj = load_task(task)
@@ -161,13 +161,13 @@ def run_evaluation(
         sys.exit(1)
 
     console.print(
-        f"[bold]Nomon[/bold] running [cyan]{task_obj.name}[/cyan] "
+        f"[bold]Gnomon[/bold] running [cyan]{task_obj.name}[/cyan] "
         f"(type={task_obj.task_type}, agents={', '.join(task_obj.agents)})"
     )
     if dry_run:
         console.print("[yellow]dry-run: agents will not be spawned[/yellow]")
 
-    orch = NomonOrchestrator(runs_dir=runs_dir, dry_run=dry_run)
+    orch = GnomonOrchestrator(runs_dir=runs_dir, dry_run=dry_run)
     report = orch.run(task_obj)
 
     if show:
@@ -224,7 +224,7 @@ def rubric_check(rubric_path: Path = typer.Argument(..., help="Path to rubric.ya
         err_console.print(f"[red]✗ File not found: {rubric_path}[/red]")
         sys.exit(1)
 
-    from openclaw_nomon.rubric import (
+    from openclaw_gnomon.rubric import (
         QUANTITATIVE_MIN_RATIO,
         RubricValidationError,
         _label_counts,

@@ -52,12 +52,12 @@ def stage_skill_files(skills_dir: Path) -> None:
     import importlib.resources
     try:
         from importlib.resources import files
-        skill_template_file = files("openclaw_nomon.skill_template").joinpath("SKILL.md")
+        skill_template_file = files("openclaw_gnomon.skill_template").joinpath("SKILL.md")
         skill_content = skill_template_file.read_text()
     except (ImportError, TypeError):
         import pkg_resources
         skill_content = pkg_resources.resource_string(
-            "openclaw_nomon.skill_template", "SKILL.md"
+            "openclaw_gnomon.skill_template", "SKILL.md"
         ).decode("utf-8")
 
     target_file = skill_target_dir / "SKILL.md"

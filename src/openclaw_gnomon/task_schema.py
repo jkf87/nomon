@@ -1,5 +1,5 @@
 """
-Nomon task schema — definitions for evaluation tasks.
+Gnomon task schema — definitions for evaluation tasks.
 
 A `task.yaml` describes:
 1. WHAT to evaluate (code/translation/blog/UI)
@@ -15,7 +15,7 @@ import yaml
 from pydantic import BaseModel, Field, ValidationError
 
 
-TaskType = Literal["code", "translation", "blog", "ui"]
+TaskType = Literal["code", "translation", "blog", "ui", "video"]
 AgentName = Literal["claude-code", "codex"]
 
 
@@ -54,8 +54,24 @@ class UITaskSpec(BaseModel):
     wcag_level: Literal["AA", "AAA"] = "AA"
 
 
+class VideoTaskSpec(BaseModel):
+    prompt: Optional[str] = None
+    video_path: str
+    subtitle_path: Optional[str] = None
+    reference_subtitle: Optional[str] = None
+    aspect_ratio: Literal["16:9", "9:16", "1:1"] = "16:9"
+    min_duration_seconds: Optional[float] = None
+    max_duration_seconds: Optional[float] = None
+    thumbnail_path: Optional[str] = None
+    chapter_markers_required: bool = False
+    audio_peak_dbfs_min: float = -3.0
+    audio_peak_dbfs_max: float = -1.0
+    audio_lufs_target: float = -14.0
+    audio_lufs_tolerance: float = 1.0
+
+
 TaskSpec = Annotated[
-    Union[CodeTaskSpec, TranslationTaskSpec, BlogTaskSpec, UITaskSpec],
+    Union[CodeTaskSpec, TranslationTaskSpec, BlogTaskSpec, UITaskSpec, VideoTaskSpec],
     Field(discriminator=None),
 ]
 
@@ -65,10 +81,11 @@ _SPEC_BY_TYPE = {
     "translation": TranslationTaskSpec,
     "blog": BlogTaskSpec,
     "ui": UITaskSpec,
+    "video": VideoTaskSpec,
 }
 
 
-class NomonTask(BaseModel):
+class GnomonTask(BaseModel):
     name: str
     task_type: TaskType
     spec: dict
@@ -77,7 +94,7 @@ class NomonTask(BaseModel):
 
     def parsed_spec(
         self,
-    ) -> Union[CodeTaskSpec, TranslationTaskSpec, BlogTaskSpec, UITaskSpec]:
+    ) -> Union[CodeTaskSpec, TranslationTaskSpec, BlogTaskSpec, UITaskSpec, VideoTaskSpec]:
         spec_cls = _SPEC_BY_TYPE[self.task_type]
         return spec_cls(**self.spec)
 
@@ -86,14 +103,14 @@ class TaskSchemaError(Exception):
     """Raised when a task definition is invalid."""
 
 
-def load_task(path: Path) -> NomonTask:
+def load_task(path: Path) -> GnomonTask:
     """Load a task from a YAML file and validate the spec block."""
     path = Path(path)
     with open(path) as f:
         data = yaml.safe_load(f) or {}
 
     try:
-        task = NomonTask(**data)
+        task = GnomonTask(**data)
     except ValidationError as exc:
         raise TaskSchemaError(f"Invalid task at {path}: {exc}") from exc
 

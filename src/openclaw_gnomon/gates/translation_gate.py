@@ -10,7 +10,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
-from openclaw_nomon.gates.base import GateResult
+from openclaw_gnomon.gates.base import GateResult
 
 
 _WORD_RE = re.compile(r"\w+", re.UNICODE)

@@ -1,0 +1,12 @@
+name: "Blog Post Quality Check"
+task_type: blog
+spec:
+  prompt: "Write a blog post on JWT vs session cookies for the engineering blog."
+  content_path: "post/"
+  check_links: true
+  check_image_alt: true
+  check_spelling: false
+agents:
+  - claude-code
+  - codex
+timeout_seconds: 240

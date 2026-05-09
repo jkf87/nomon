@@ -4,7 +4,7 @@ import pytest
 import yaml
 from pathlib import Path
 
-from openclaw_nomon.rubric_engine import (
+from openclaw_gnomon.rubric_engine import (
     Rubric, Criterion, Measure, Label, TaskDef, GoalPersona,
     load_rubric, dry_run,
 )

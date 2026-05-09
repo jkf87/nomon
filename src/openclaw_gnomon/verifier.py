@@ -1,5 +1,5 @@
 """
-Nomon verifier module — quantitative and qualitative evaluation signals.
+Gnomon verifier module — quantitative and qualitative evaluation signals.
 
 These are building blocks for rubric.yaml evaluation items.
 Each function returns True (PASS) or False (FAIL).

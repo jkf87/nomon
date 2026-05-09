@@ -1,13 +1,14 @@
 """
-Nomon evaluation gates — pluggable evaluators for agent outputs.
+Gnomon evaluation gates — pluggable evaluators for agent outputs.
 """
 from __future__ import annotations
 
-from openclaw_nomon.gates.base import EvalGate, GateResult
-from openclaw_nomon.gates.blog_gate import BlogGate
-from openclaw_nomon.gates.code_gate import CodeGate
-from openclaw_nomon.gates.translation_gate import TranslationGate
-from openclaw_nomon.gates.ui_gate import UIGate
+from openclaw_gnomon.gates.base import EvalGate, GateResult
+from openclaw_gnomon.gates.blog_gate import BlogGate
+from openclaw_gnomon.gates.code_gate import CodeGate
+from openclaw_gnomon.gates.translation_gate import TranslationGate
+from openclaw_gnomon.gates.ui_gate import UIGate
+from openclaw_gnomon.gates.video_gate import VideoGate
 
 
 GATES = {
@@ -15,6 +16,7 @@ GATES = {
     "translation": TranslationGate,
     "blog": BlogGate,
     "ui": UIGate,
+    "video": VideoGate,
 }
 
 
@@ -31,6 +33,7 @@ __all__ = [
     "TranslationGate",
     "BlogGate",
     "UIGate",
+    "VideoGate",
     "GATES",
     "gate_for",
 ]

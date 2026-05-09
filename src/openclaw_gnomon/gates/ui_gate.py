@@ -7,8 +7,8 @@ import re
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
-from openclaw_nomon.gates.base import GateResult
-from openclaw_nomon.verifier import check_image_alt, check_wcag_contrast
+from openclaw_gnomon.gates.base import GateResult
+from openclaw_gnomon.verifier import check_image_alt, check_wcag_contrast
 
 
 _HEX_RE = re.compile(r"#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})\b")

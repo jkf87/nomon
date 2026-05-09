@@ -1,0 +1,13 @@
+name: "Auth Module Refactor"
+task_type: code
+spec:
+  prompt: "Refactor the auth module to use JWT tokens instead of session cookies."
+  working_dir: "."
+  test_command: "pytest tests/ -v"
+  type_check_cmd: "tsc --noEmit"
+  lint_cmd: "eslint ."
+  build_cmd: "npm run build"
+agents:
+  - claude-code
+  - codex
+timeout_seconds: 300

@@ -7,8 +7,8 @@ import re
 from pathlib import Path
 from typing import Any, Dict, List
 
-from openclaw_nomon.gates.base import GateResult
-from openclaw_nomon.verifier import check_image_alt, check_link_liveness
+from openclaw_gnomon.gates.base import GateResult
+from openclaw_gnomon.verifier import check_image_alt, check_link_liveness
 
 
 _LINK_RE = re.compile(r"(?:\[[^\]]*\]\(([^)]+)\))|(<a[^>]+href=\"([^\"]+)\")")

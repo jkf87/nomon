@@ -1,0 +1,14 @@
+name: "Claude Code Docs KO Translation"
+task_type: translation
+spec:
+  prompt: "Translate the source markdown into natural Korean. Preserve product names."
+  source_path: "docs/en/"
+  target_lang: "ko"
+  proper_nouns:
+    - "Claude"
+    - "Anthropic"
+    - "TypeScript"
+agents:
+  - claude-code
+  - codex
+timeout_seconds: 300
