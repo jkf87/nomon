@@ -1,7 +1,7 @@
 # nomon
 
 <p align="center">
-  <img src="assets/nomon-hero.jpg" alt="nomon — a sundial casting an evaluation shadow" width="560">
+  <img src="docs/images/nomon-logo.jpg" alt="노몬 — 해시계 바늘이 드리우는 평가의 그림자" width="200">
 </p>
 
 **노몬(nomon)** — 해시계 바늘. 태양 빛이 닿는 순간 그림자가 정답이 된다.
