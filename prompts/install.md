@@ -1,10 +1,10 @@
-# End-User: Install Gnomon
+# End-User: Install Nomon
 
 One-line install:
 \`\`\`bash
-uvx --from git+https://github.com/jkf87/openclaw-gnomon openclaw-gnomon install
+uvx --from git+https://github.com/jkf87/nomon nomon install
 \`\`\`
 
-Verify: \`openclaw-gnomon doctor\`
+Verify: \`nomon doctor\`
 
-Uninstall: \`openclaw-gnomon uninstall\`
+Uninstall: \`nomon uninstall\`

@@ -1,8 +1,8 @@
 """
-Gnomon rubric module — eval-first harness.
+Nomon rubric module — eval-first harness.
 
 Philosophy: rubric.yaml must exist before any workflow can run.
-Like TDD (tests before code), Gnomon requires rubric before workflow.
+Like TDD (tests before code), Nomon requires rubric before workflow.
 
 Hierarchy:
   GoalPersona  — who the output is for
@@ -72,7 +72,7 @@ class DryRunConfig:
 
 @dataclass
 class Rubric:
-    """A complete eval contract for a Gnomon workflow."""
+    """A complete eval contract for a Nomon workflow."""
     task: str
     goal_persona: GoalPersona
     items: List[RubricItem] = field(default_factory=list)

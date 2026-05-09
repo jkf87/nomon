@@ -1,8 +1,8 @@
-"""Tests for gnomon rubric module — eval-first harness."""
+"""Tests for nomon rubric module — eval-first harness."""
 import pytest
 from pathlib import Path
 
-from openclaw_gnomon.rubric import (
+from openclaw_nomon.rubric import (
     QUANTITATIVE_MIN_RATIO,
     DryRunConfig,
     GoalPersona,

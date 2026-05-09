@@ -1,4 +1,4 @@
-from openclaw_gnomon import verifier
+from openclaw_nomon import verifier
 
 
 def test_check_font_size_requires_detected_sizes_to_meet_minimum():

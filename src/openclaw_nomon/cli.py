@@ -4,37 +4,37 @@ from pathlib import Path
 import typer
 from rich.console import Console
 
-from openclaw_gnomon.paths import (
-    gnomon_config_path,
+from openclaw_nomon.paths import (
+    nomon_config_path,
     openclaw_mcp_config_path,
     openclaw_skills_dir,
 )
-from openclaw_gnomon.installer import (
+from openclaw_nomon.installer import (
     merge_mcp_entry,
     remove_mcp_entry,
     stage_skill_files,
-    write_gnomon_config,
+    write_nomon_config,
 )
 
 console = Console()
 err_console = Console(stderr=True)
-app = typer.Typer(help="Gnomon — eval-first workflow harness for OpenClaw")
+app = typer.Typer(help="Nomon — eval-first workflow harness for OpenClaw")
 rubric_app = typer.Typer(help="Rubric management commands")
 app.add_typer(rubric_app, name="rubric")
 
 
 @app.command()
 def install(verbose: bool = typer.Option(False, "--verbose", "-v")):
-    """Install Gnomon skill and MCP into OpenClaw. Idempotent."""
+    """Install Nomon skill and MCP into OpenClaw. Idempotent."""
     try:
         skills_dir = openclaw_skills_dir()
         mcp_config_path = openclaw_mcp_config_path()
-        config_path = gnomon_config_path()
+        config_path = nomon_config_path()
 
-        console.print("[bold]Installing Gnomon for OpenClaw...[/bold]")
+        console.print("[bold]Installing Nomon for OpenClaw...[/bold]")
 
         if verbose:
-            console.print(f"  Staging skill files to {skills_dir}/gnomon/")
+            console.print(f"  Staging skill files to {skills_dir}/nomon/")
         stage_skill_files(skills_dir)
         console.print("[green]✓[/green] Skill staged")
 
@@ -45,11 +45,11 @@ def install(verbose: bool = typer.Option(False, "--verbose", "-v")):
 
         if verbose:
             console.print(f"  Writing config to {config_path}")
-        write_gnomon_config(config_path)
+        write_nomon_config(config_path)
         console.print("[green]✓[/green] Config written")
 
         console.print("\n[bold green]Installation complete![/bold green]")
-        console.print("Run: /gnomon:setup")
+        console.print("Run: /nomon:setup")
 
     except Exception as e:
         err_console.print(f"[red]✗ Installation failed: {e}[/red]")
@@ -61,17 +61,17 @@ def install(verbose: bool = typer.Option(False, "--verbose", "-v")):
 
 @app.command()
 def uninstall(verbose: bool = typer.Option(False, "--verbose", "-v")):
-    """Uninstall Gnomon from OpenClaw."""
+    """Uninstall Nomon from OpenClaw."""
     try:
         mcp_config_path = openclaw_mcp_config_path()
-        console.print("[bold]Uninstalling Gnomon from OpenClaw...[/bold]")
+        console.print("[bold]Uninstalling Nomon from OpenClaw...[/bold]")
 
         if verbose:
             console.print(f"  Removing MCP entry from {mcp_config_path}")
         remove_mcp_entry(mcp_config_path)
         console.print("[green]✓[/green] MCP entry removed")
 
-        console.print("[yellow]Note:[/yellow] ~/.openclaw/skills/gnomon/ not deleted")
+        console.print("[yellow]Note:[/yellow] ~/.openclaw/skills/nomon/ not deleted")
         console.print("\n[bold green]Uninstall complete![/bold green]")
 
     except Exception as e:
@@ -81,17 +81,17 @@ def uninstall(verbose: bool = typer.Option(False, "--verbose", "-v")):
 
 @app.command()
 def doctor(verbose: bool = typer.Option(False, "--verbose", "-v")):
-    """Diagnose Gnomon installation."""
+    """Diagnose Nomon installation."""
     try:
-        console.print("[bold]Diagnosing Gnomon installation...[/bold]")
+        console.print("[bold]Diagnosing Nomon installation...[/bold]")
 
         skills_dir = openclaw_skills_dir()
         mcp_config_path = openclaw_mcp_config_path()
-        config_path = gnomon_config_path()
+        config_path = nomon_config_path()
 
         checks = []
 
-        skill_file = skills_dir / "gnomon" / "SKILL.md"
+        skill_file = skills_dir / "nomon" / "SKILL.md"
         skill_ok = skill_file.exists()
         checks.append(("Skill file", skill_ok, str(skill_file)))
 
@@ -101,13 +101,13 @@ def doctor(verbose: bool = typer.Option(False, "--verbose", "-v")):
             try:
                 with open(mcp_config_path) as f:
                     config = json.load(f)
-                mcp_ok = "gnomon" in config.get("mcpServers", {})
+                mcp_ok = "nomon" in config.get("mcpServers", {})
             except Exception:
                 pass
         checks.append(("MCP entry", mcp_ok, str(mcp_config_path)))
 
         config_ok = config_path.exists()
-        checks.append(("Gnomon config", config_ok, str(config_path)))
+        checks.append(("Nomon config", config_ok, str(config_path)))
 
         import subprocess
         try:
@@ -127,7 +127,7 @@ def doctor(verbose: bool = typer.Option(False, "--verbose", "-v")):
             console.print("\n[bold green]All checks passed![/bold green]")
             sys.exit(0)
         else:
-            console.print("\n[bold yellow]Some checks failed. Run: openclaw-gnomon install[/bold yellow]")
+            console.print("\n[bold yellow]Some checks failed. Run: nomon install[/bold yellow]")
             sys.exit(1)
 
     except Exception as e:
@@ -136,48 +136,71 @@ def doctor(verbose: bool = typer.Option(False, "--verbose", "-v")):
 
 
 @app.command(name="run")
-def run_workflow(
-    rubric: Path = typer.Option(None, "--rubric", "-r", help="Path to rubric.yaml"),
+def run_evaluation(
+    task: Path = typer.Argument(..., help="Path to task.yaml"),
+    runs_dir: Path = typer.Option(
+        Path(".nomon/runs"), "--runs-dir", help="Where to write per-run output"
+    ),
+    dry_run: bool = typer.Option(
+        False, "--dry-run", help="Skip spawning real agents — write placeholder outputs"
+    ),
+    show: bool = typer.Option(True, "--show/--no-show", help="Print the report to stdout"),
 ):
-    """Run a Gnomon workflow. Requires a rubric.yaml (eval-first)."""
-    if rubric is None:
-        rubric = Path("rubric.yaml")
-
-    if not rubric.exists():
-        err_console.print(
-            "[red]✗ No rubric.yaml found.[/red]\n"
-            "Gnomon requires eval criteria before execution.\n"
-            "Create one with:\n\n"
-            "  [bold]openclaw-gnomon rubric new[/bold]\n\n"
-            "Then review it with:\n\n"
-            "  [bold]openclaw-gnomon rubric check rubric.yaml[/bold]"
-        )
+    """Run a multi-agent evaluation defined by a task.yaml."""
+    if not task.exists():
+        err_console.print(f"[red]✗ Task file not found: {task}[/red]")
         sys.exit(1)
 
-    from openclaw_gnomon.rubric import RubricValidationError, dry_run_check, load_rubric, validate_rubric
-
-    rubric_obj = load_rubric(rubric)
+    from openclaw_nomon.orchestrator import NomonOrchestrator
+    from openclaw_nomon.task_schema import TaskSchemaError, load_task
 
     try:
-        warnings = validate_rubric(rubric_obj)
-    except RubricValidationError as e:
-        err_console.print(f"[red]✗ Rubric validation failed:[/red]\n{e}")
-        err_console.print("\nFix the rubric and re-run: [bold]openclaw-gnomon rubric check rubric.yaml[/bold]")
+        task_obj = load_task(task)
+    except TaskSchemaError as exc:
+        err_console.print(f"[red]✗ {exc}[/red]")
         sys.exit(1)
 
-    for w in warnings:
-        console.print(f"[yellow]⚠ {w}[/yellow]")
+    console.print(
+        f"[bold]Nomon[/bold] running [cyan]{task_obj.name}[/cyan] "
+        f"(type={task_obj.task_type}, agents={', '.join(task_obj.agents)})"
+    )
+    if dry_run:
+        console.print("[yellow]dry-run: agents will not be spawned[/yellow]")
 
-    dry_errors = dry_run_check(rubric_obj)
-    if dry_errors:
-        err_console.print("[red]✗ Dry-run pre-flight failed:[/red]")
-        for err in dry_errors:
-            err_console.print(f"  [red]•[/red] {err}")
+    orch = NomonOrchestrator(runs_dir=runs_dir, dry_run=dry_run)
+    report = orch.run(task_obj)
+
+    if show:
+        console.print(report.to_markdown())
+    console.print(
+        f"[green]✓[/green] Winner: {report.winner or '—'} | "
+        f"agents: {len(report.agents)}"
+    )
+
+
+@app.command(name="compare")
+def compare(
+    task: Path = typer.Argument(..., help="Path to task.yaml"),
+    runs_dir: Path = typer.Option(
+        Path(".nomon/runs"), "--runs-dir", help="Where to write per-run output"
+    ),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Skip spawning real agents"),
+):
+    """Run agents on a task and emit a side-by-side comparison."""
+    run_evaluation(task=task, runs_dir=runs_dir, dry_run=dry_run, show=True)
+
+
+@app.command(name="report")
+def show_report(
+    run_id: str = typer.Argument(..., help="Run directory name under runs_dir"),
+    runs_dir: Path = typer.Option(Path(".nomon/runs"), "--runs-dir"),
+):
+    """Print a previously stored report.md."""
+    target = runs_dir / run_id / "report.md"
+    if not target.exists():
+        err_console.print(f"[red]✗ Report not found: {target}[/red]")
         sys.exit(1)
-
-    console.print(f"[green]✓[/green] Rubric loaded: {len(rubric_obj.items)} items")
-    console.print(f"[green]✓[/green] Persona: {rubric_obj.goal_persona.role}")
-    console.print("[bold]Gnomon workflow ready. (wire your workflow execution here)[/bold]")
+    console.print(target.read_text(encoding="utf-8"))
 
 
 @rubric_app.command(name="new")
@@ -191,7 +214,7 @@ def rubric_new(
 
     output.write_text(content)
     console.print(f"[green]✓[/green] Rubric template created: {output}")
-    console.print(f"Edit it, then validate with: [bold]openclaw-gnomon rubric check {output}[/bold]")
+    console.print(f"Edit it, then validate with: [bold]nomon rubric check {output}[/bold]")
 
 
 @rubric_app.command(name="check")
@@ -201,7 +224,7 @@ def rubric_check(rubric_path: Path = typer.Argument(..., help="Path to rubric.ya
         err_console.print(f"[red]✗ File not found: {rubric_path}[/red]")
         sys.exit(1)
 
-    from openclaw_gnomon.rubric import (
+    from openclaw_nomon.rubric import (
         QUANTITATIVE_MIN_RATIO,
         RubricValidationError,
         _label_counts,

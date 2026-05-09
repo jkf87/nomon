@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "openclaw-gnomon"
+name = "nomon"
 version = "0.1.0"
-description = "Gnomon: rubric-first evaluation harness for OpenClaw. Define what good looks like before writing."
+description = "Nomon: rubric-first evaluation harness for OpenClaw. Define what good looks like before writing."
 readme = "README.md"
 license = { text = "MIT" }
 authors = [{ name = "jkf87", email = "jjoongoo@gmail.com" }]
@@ -26,7 +26,10 @@ dev = [
 ]
 
 [project.scripts]
-openclaw-gnomon = "openclaw_gnomon.cli:app"
+nomon = "openclaw_nomon.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/openclaw_nomon"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -1,6 +1,6 @@
-# Gnomon Rubric Template
+# Nomon Rubric Template
 # 평가-중심 하네스: spec → rubric → verifier → writer
-# 이 파일을 작성하고 /gnomon:rubric check rubric.yaml 로 검증하세요.
+# 이 파일을 작성하고 /nomon:rubric check rubric.yaml 로 검증하세요.
 
 task:
   name: "Your task name"

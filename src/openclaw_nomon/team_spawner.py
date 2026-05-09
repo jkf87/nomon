@@ -220,7 +220,7 @@ def spawn_team(
     if team is None:
         team = DEFAULT_TEAM
     if workspace is None:
-        workspace = Path(tempfile.mkdtemp(prefix="gnomon-"))
+        workspace = Path(tempfile.mkdtemp(prefix="nomon-"))
 
     workspace = Path(workspace)
     rubric_path = Path(rubric_path)

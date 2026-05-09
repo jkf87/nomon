@@ -20,10 +20,10 @@ def openclaw_mcp_config_path() -> Path:
     return home / ".openclaw" / "mcp" / "claude-mcp-config.json"
 
 
-def gnomon_config_path() -> Path:
-    """Return ~/.gnomon/config.yaml path. Override with GNOMON_CONFIG env var."""
-    env = os.environ.get("GNOMON_CONFIG")
+def nomon_config_path() -> Path:
+    """Return ~/.nomon/config.yaml path. Override with NOMON_CONFIG env var."""
+    env = os.environ.get("NOMON_CONFIG")
     if env:
         return Path(env)
     home = Path.home()
-    return home / ".gnomon" / "config.yaml"
+    return home / ".nomon" / "config.yaml"
