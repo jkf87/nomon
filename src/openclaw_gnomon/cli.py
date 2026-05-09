@@ -49,7 +49,7 @@ def install(verbose: bool = typer.Option(False, "--verbose", "-v")):
         console.print("Run: /gnomon:setup")
 
     except Exception as e:
-        console.print(f"[red]✗ Installation failed: {e}[/red]", err=True)
+        console.print(f"[red]✗ Installation failed: {e}[/red]")
         if verbose:
             import traceback
             traceback.print_exc()
@@ -72,7 +72,7 @@ def uninstall(verbose: bool = typer.Option(False, "--verbose", "-v")):
         console.print("\n[bold green]Uninstall complete![/bold green]")
 
     except Exception as e:
-        console.print(f"[red]✗ Uninstall failed: {e}[/red]", err=True)
+        console.print(f"[red]✗ Uninstall failed: {e}[/red]")
         sys.exit(1)
 
 
@@ -128,7 +128,7 @@ def doctor(verbose: bool = typer.Option(False, "--verbose", "-v")):
             sys.exit(1)
 
     except Exception as e:
-        console.print(f"[red]Doctor check failed: {e}[/red]", err=True)
+        console.print(f"[red]Doctor check failed: {e}[/red]")
         sys.exit(1)
 
 
