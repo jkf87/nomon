@@ -1,22 +1,22 @@
-# nomon
+# gnomon
 
 <p align="center">
-  <img src="assets/nomon-hero.jpg" alt="nomon — a sundial casting an evaluation shadow" width="560">
+  <img src="assets/nomon-hero.jpg" alt="gnomon — a sundial casting an evaluation shadow" width="560">
 </p>
 
-**노몬(nomon)** — 해시계 바늘. 태양 빛이 닿는 순간 그림자가 정답이 된다.
+**그노몬(gnomon)** — 해시계 바늘. 태양 빛이 닿는 순간 그림자가 정답이 된다.
 
 Rubric-first evaluation harness for OpenClaw. Define what "good" looks like before writing a single line.
 
 ---
 
-## 노몬이 뭔가요?
+## 그노몬이 뭔가요?
 
-**노몬(nomon)**은 해시계의 바늘이다. 태양을 기준으로 그림자를 드리워 시간을 측정하는 도구 — 인류 최초의 정량 verifier. LLM에게 묻지 않고 ground truth에 직접 대조한다.
+**그노몬(gnomon)**은 해시계의 바늘이다. 태양을 기준으로 그림자를 드리워 시간을 측정하는 도구 — 인류 최초의 정량 verifier. LLM에게 묻지 않고 ground truth에 직접 대조한다.
 
-노몬은 그 원리를 AI 하네스에 적용한다. `rubric.yaml`이 먼저, workflow가 나중이다.
+그노몬은 그 원리를 AI 하네스에 적용한다. `rubric.yaml`이 먼저, workflow가 나중이다.
 
-| | 노몬 |
+| | 그노몬 |
 |---|---|
 | 철학 | rubric-first (평가 먼저, 작성 나중) |
 | 진입점 | rubric.yaml |
@@ -29,33 +29,33 @@ Rubric-first evaluation harness for OpenClaw. Define what "good" looks like befo
 ## Quick Start
 
 ```bash
-uvx --from git+https://github.com/jkf87/nomon nomon install
+uvx --from git+https://github.com/jkf87/openclaw-gnomon gnomon install
 ```
 
-Then in OpenClaw: `/nomon:setup`
+Then in OpenClaw: `/gnomon:setup`
 
-Done. You now have `/nomon:rubric`, `/nomon:verify-check`, `/nomon:run`, `/nomon:calibrate`.
+Done. You now have `/gnomon:rubric`, `/gnomon:verify-check`, `/gnomon:run`, `/gnomon:calibrate`.
 
-Verify: `uvx --from git+https://github.com/jkf87/nomon nomon doctor`
+Verify: `uvx --from git+https://github.com/jkf87/openclaw-gnomon gnomon doctor`
 
-Uninstall: `uvx --from git+https://github.com/jkf87/nomon nomon uninstall`
+Uninstall: `uvx --from git+https://github.com/jkf87/openclaw-gnomon gnomon uninstall`
 
 ---
 
 ## Workflow
 
 ```
-/nomon:rubric "카드뉴스 10장 생성"
+/gnomon:rubric "카드뉴스 10장 생성"
 ↓
 rubric.yaml 정의 (정량 + 페르소나-LLM + 사람 라벨 필수)
 ↓
-/nomon:verify-check rubric.yaml
+/gnomon:verify-check rubric.yaml
 ↓ (PASS일 때만)
-/nomon:run rubric.yaml
+/gnomon:run rubric.yaml
 ↓
 writer → verifier 루프 (통과할 때까지)
 ↓
-/nomon:calibrate rubric.yaml --samples 5
+/gnomon:calibrate rubric.yaml --samples 5
 ```
 
 ---
