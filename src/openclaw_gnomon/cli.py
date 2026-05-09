@@ -5,7 +5,7 @@ import typer
 from rich.console import Console
 
 from openclaw_gnomon.paths import (
-    nomon_config_path,
+    gnomon_config_path,
     openclaw_mcp_config_path,
     openclaw_skills_dir,
 )
@@ -13,7 +13,7 @@ from openclaw_gnomon.installer import (
     merge_mcp_entry,
     remove_mcp_entry,
     stage_skill_files,
-    write_nomon_config,
+    write_gnomon_config,
 )
 
 console = Console()
@@ -29,12 +29,12 @@ def install(verbose: bool = typer.Option(False, "--verbose", "-v")):
     try:
         skills_dir = openclaw_skills_dir()
         mcp_config_path = openclaw_mcp_config_path()
-        config_path = nomon_config_path()
+        config_path = gnomon_config_path()
 
         console.print("[bold]Installing Gnomon for OpenClaw...[/bold]")
 
         if verbose:
-            console.print(f"  Staging skill files to {skills_dir}/nomon/")
+            console.print(f"  Staging skill files to {skills_dir}/gnomon/")
         stage_skill_files(skills_dir)
         console.print("[green]✓[/green] Skill staged")
 
@@ -45,11 +45,11 @@ def install(verbose: bool = typer.Option(False, "--verbose", "-v")):
 
         if verbose:
             console.print(f"  Writing config to {config_path}")
-        write_nomon_config(config_path)
+        write_gnomon_config(config_path)
         console.print("[green]✓[/green] Config written")
 
         console.print("\n[bold green]Installation complete![/bold green]")
-        console.print("Run: /nomon:setup")
+        console.print("Run: /gnomon:setup")
 
     except Exception as e:
         err_console.print(f"[red]✗ Installation failed: {e}[/red]")
@@ -71,7 +71,7 @@ def uninstall(verbose: bool = typer.Option(False, "--verbose", "-v")):
         remove_mcp_entry(mcp_config_path)
         console.print("[green]✓[/green] MCP entry removed")
 
-        console.print("[yellow]Note:[/yellow] ~/.openclaw/skills/nomon/ not deleted")
+        console.print("[yellow]Note:[/yellow] ~/.openclaw/skills/gnomon/ not deleted")
         console.print("\n[bold green]Uninstall complete![/bold green]")
 
     except Exception as e:
@@ -81,17 +81,17 @@ def uninstall(verbose: bool = typer.Option(False, "--verbose", "-v")):
 
 @app.command()
 def doctor(verbose: bool = typer.Option(False, "--verbose", "-v")):
-    """Diagnose Gnomon installation."""
+    """Diagnose Ggnomon installation."""
     try:
-        console.print("[bold]Diagnosing Gnomon installation...[/bold]")
+        console.print("[bold]Diagnosing Ggnomon installation...[/bold]")
 
         skills_dir = openclaw_skills_dir()
         mcp_config_path = openclaw_mcp_config_path()
-        config_path = nomon_config_path()
+        config_path = gnomon_config_path()
 
         checks = []
 
-        skill_file = skills_dir / "nomon" / "SKILL.md"
+        skill_file = skills_dir / "gnomon" / "SKILL.md"
         skill_ok = skill_file.exists()
         checks.append(("Skill file", skill_ok, str(skill_file)))
 
@@ -101,7 +101,7 @@ def doctor(verbose: bool = typer.Option(False, "--verbose", "-v")):
             try:
                 with open(mcp_config_path) as f:
                     config = json.load(f)
-                mcp_ok = "nomon" in config.get("mcpServers", {})
+                mcp_ok = "gnomon" in config.get("mcpServers", {})
             except Exception:
                 pass
         checks.append(("MCP entry", mcp_ok, str(mcp_config_path)))
@@ -127,7 +127,7 @@ def doctor(verbose: bool = typer.Option(False, "--verbose", "-v")):
             console.print("\n[bold green]All checks passed![/bold green]")
             sys.exit(0)
         else:
-            console.print("\n[bold yellow]Some checks failed. Run: nomon install[/bold yellow]")
+            console.print("\n[bold yellow]Some checks failed. Run: gnomon install[/bold yellow]")
             sys.exit(1)
 
     except Exception as e:
@@ -139,7 +139,7 @@ def doctor(verbose: bool = typer.Option(False, "--verbose", "-v")):
 def run_evaluation(
     task: Path = typer.Argument(..., help="Path to task.yaml"),
     runs_dir: Path = typer.Option(
-        Path(".nomon/runs"), "--runs-dir", help="Where to write per-run output"
+        Path(".gnomon/runs"), "--runs-dir", help="Where to write per-run output"
     ),
     dry_run: bool = typer.Option(
         False, "--dry-run", help="Skip spawning real agents — write placeholder outputs"
@@ -182,7 +182,7 @@ def run_evaluation(
 def compare(
     task: Path = typer.Argument(..., help="Path to task.yaml"),
     runs_dir: Path = typer.Option(
-        Path(".nomon/runs"), "--runs-dir", help="Where to write per-run output"
+        Path(".gnomon/runs"), "--runs-dir", help="Where to write per-run output"
     ),
     dry_run: bool = typer.Option(False, "--dry-run", help="Skip spawning real agents"),
 ):
@@ -193,7 +193,7 @@ def compare(
 @app.command(name="report")
 def show_report(
     run_id: str = typer.Argument(..., help="Run directory name under runs_dir"),
-    runs_dir: Path = typer.Option(Path(".nomon/runs"), "--runs-dir"),
+    runs_dir: Path = typer.Option(Path(".gnomon/runs"), "--runs-dir"),
 ):
     """Print a previously stored report.md."""
     target = runs_dir / run_id / "report.md"
